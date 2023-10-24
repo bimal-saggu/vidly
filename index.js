@@ -48,6 +48,16 @@ app.put('/api/genres/:id', (req, res) => {
     res.send(genre);
 })
 
+app.delete('/api/genres/:id', (req, res) => {
+    const genre = genres.find(g => g.id === parseInt(req.params.id));
+    if(!genre) return res.status(404).send('The genre with the given ID does not exist');
+
+    const index = genres.indexOf(genre);
+    genres.splice(index, 1);
+
+    res.send(genre);
+})
+
 app.get('/', (req, res) => {
     res.send('VIDLY APPLICATION');
 });
@@ -65,4 +75,4 @@ const port = process.env.PORT || 3000;
 
 app.listen(port, () => {
     console.log(`Listening on port ${port}...`);
-})
+})  
