@@ -7,7 +7,7 @@ app.use(express.json());
 
 const genres = [
     {id: 1, name: 'Action'},
-    {id: 2, naem: 'Adventure'},
+    {id: 2, name: 'Adventure'},
     {id: 3, name: 'Comedy'},
     {id: 4, name: 'Crime'},
     {id: 5, name: 'Drama'},
@@ -36,9 +36,22 @@ app.post('/api/genres', (req, res) => {
     res.send(genres);
 })
 
+app.put('/api/genres/:id', (req, res) => {
+    const genre = genres.find(g => g.id === parseInt(req.params.id));
+    if(!genre) return res.status(404).send('The genre with the given ID does not exist');
+
+    const {error} = validateGenre(req.body);
+    
+    if(error) return res.status(400).send(error.details[0].message);
+
+    genre.name = req.body.name;
+    res.send(genre);
+})
+
 app.get('/', (req, res) => {
     res.send('VIDLY APPLICATION');
 });
+
 
 function validateGenre(genre) {
     const schema = {
